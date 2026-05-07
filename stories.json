@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "version": 1,
+  "stories": [
+    {
+      "id": "story_04",
+      "title": "বনের ছোট্ট বন্ধু",
+      "desc": "বন্ধুত্ব আর সাহসের মিষ্টি গল্প",
+      "duration": "২:১০",
+      "category": "শিক্ষণীয়",
+      "file_name": "story_04.wav",
+      "audio_path": "/audio/story_04.wav",
+      "auto_download": true,
+      "popular": true,
+      "active": true
+    },
+    {
+      "id": "story_05",
+      "title": "রঙিন পাখির গান",
+      "desc": "আনন্দ আর ভালোবাসার গল্প",
+      "duration": "৩:২০",
+      "category": "রূপকথা",
+      "file_name": "story_05.wav",
+      "audio_path": "/audio/story_05.wav",
+      "auto_download": true,
+      "popular": true,
+      "active": true
+    },
+    {
+      "id": "story_06",
+      "title": "ছোট্ট নদীর স্বপ্ন",
+      "desc": "প্রকৃতি আর স্বপ্নের সুন্দর গল্প",
+      "duration": "২:৪৫",
+      "category": "ঘুমপাড়ানি",
+      "file_name": "story_06.wav",
+      "audio_path": "/audio/story_06.wav",
+      "auto_download": false,
+      "popular": false,
+      "active": true
+    }
+  ]
+}
