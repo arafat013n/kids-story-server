@@ -1,24 +1,33 @@
 {
   "name": "kids-story-server",
-  "version": "1.0.0",
-  "description": "Bangla Kids Audio Story Server",
+  "version": "3.0.0",
+  "description": "Secure MVC server for Kids Audio Story main app and admin app",
   "main": "server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "check": "node -c server.js && node -c src/app.js && node -c src/config/env.js && node -c src/database/db.js && node -c src/database/migrations.js && node -c src/utils/file.js"
   },
   "keywords": [
-    "kids",
-    "story",
-    "audio",
-    "bangla",
-    "express"
+    "kids-audio-story",
+    "express",
+    "sqlite",
+    "mvc",
+    "secure-audio"
   ],
   "author": "Akash",
-  "license": "MIT",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
+    "better-sqlite3": "^11.7.0",
     "cors": "^2.8.5",
-    "express": "^4.18.3"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
