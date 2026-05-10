@@ -191,7 +191,16 @@ function listAdminStories(req, res) {
 
 function getNextStoryId(req, res) {
   try {
+    console.log("ADMIN_NEXT_STORY_ID_REQUEST");
+
+    if (!StoryModel || typeof StoryModel.getNextStoryId !== "function") {
+      console.error("ADMIN_NEXT_STORY_ID_ERROR: StoryModel.getNextStoryId is not a function");
+      return serverError(res, "Could not generate next story id");
+    }
+
     const next = StoryModel.getNextStoryId();
+
+    console.log("ADMIN_NEXT_STORY_ID_SUCCESS:", next);
 
     return success(res, {
       story_number: next.story_number,
@@ -199,9 +208,10 @@ function getNextStoryId(req, res) {
       next_id: next.id
     });
   } catch (error) {
-    if (env.NODE_ENV !== "production") {
-      console.error("Next story id error:", error.message);
-    }
+    console.error(
+      "ADMIN_NEXT_STORY_ID_ERROR:",
+      error && error.stack ? error.stack : error
+    );
 
     return serverError(res, "Could not generate next story id");
   }
