@@ -85,7 +85,12 @@ function issueMainToken(req, res) {
         ip_address: getClientIp(req),
         user_agent: String(req.headers["user-agent"] || "")
       });
-    } catch (logError) {}
+    } catch (logError) {
+      console.error(
+        "MAIN_TOKEN_LOG_ERROR:",
+        logError && logError.stack ? logError.stack : logError
+      );
+    }
 
     return success(res, {
       token: token,
@@ -94,9 +99,10 @@ function issueMainToken(req, res) {
       expire_hours: env.MAIN_TOKEN_EXPIRE_HOURS
     });
   } catch (error) {
-    if (env.NODE_ENV !== "production") {
-      console.error("Main token error:", error.message);
-    }
+    console.error(
+      "MAIN_TOKEN_CREATE_ERROR:",
+      error && error.stack ? error.stack : error
+    );
 
     return serverError(res, "Main app token create failed");
   }
@@ -136,9 +142,10 @@ function listMainStories(req, res) {
       stories: stories
     });
   } catch (error) {
-    if (env.NODE_ENV !== "production") {
-      console.error("Main stories error:", error.message);
-    }
+    console.error(
+      "MAIN_STORIES_ERROR:",
+      error && error.stack ? error.stack : error
+    );
 
     return serverError(res, "Could not load main app stories");
   }
@@ -162,7 +169,7 @@ function streamMainAudio(req, res) {
     const resolvedAudioDir = path.resolve(env.AUDIO_DIR);
 
     if (
-      resolvedAudioPath !== resolvedAudioDir &&
+      resolvedAudioPath === resolvedAudioDir ||
       !resolvedAudioPath.startsWith(resolvedAudioDir + path.sep)
     ) {
       return forbidden(res, "Invalid audio path");
@@ -176,7 +183,10 @@ function streamMainAudio(req, res) {
     res.setHeader("Accept-Ranges", "bytes");
     res.setHeader("Content-Type", mimeType);
     res.setHeader("Cache-Control", "private, max-age=86400");
-    res.setHeader("Content-Disposition", 'inline; filename="' + fileName.replace(/"/g, "") + '"');
+    res.setHeader(
+      "Content-Disposition",
+      'inline; filename="' + fileName.replace(/"/g, "") + '"'
+    );
 
     if (range) {
       const parts = String(range).replace(/bytes=/, "").split("-");
@@ -205,7 +215,12 @@ function streamMainAudio(req, res) {
         end: end
       });
 
-      stream.on("error", function () {
+      stream.on("error", function (streamError) {
+        console.error(
+          "MAIN_AUDIO_STREAM_ERROR:",
+          streamError && streamError.stack ? streamError.stack : streamError
+        );
+
         if (!res.headersSent) {
           return serverError(res, "Audio stream failed");
         }
@@ -220,7 +235,12 @@ function streamMainAudio(req, res) {
 
     const stream = fs.createReadStream(resolvedAudioPath);
 
-    stream.on("error", function () {
+    stream.on("error", function (streamError) {
+      console.error(
+        "MAIN_AUDIO_STREAM_ERROR:",
+        streamError && streamError.stack ? streamError.stack : streamError
+      );
+
       if (!res.headersSent) {
         return serverError(res, "Audio stream failed");
       }
@@ -230,9 +250,10 @@ function streamMainAudio(req, res) {
 
     return stream.pipe(res);
   } catch (error) {
-    if (env.NODE_ENV !== "production") {
-      console.error("Main audio error:", error.message);
-    }
+    console.error(
+      "MAIN_AUDIO_ERROR:",
+      error && error.stack ? error.stack : error
+    );
 
     return serverError(res, "Secure audio request failed");
   }
